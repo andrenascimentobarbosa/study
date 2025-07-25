@@ -1,0 +1,38 @@
+start qemu vm
+
+
+qemu-system-x86_64 -enable-kvm -m 2048 -hda /full/path/to/vm.img -boot c -display gtk
+
+
+replace mv.img for the .qcow .iso etc
+
+
+qemu-system-x86_64 \
+-enable-kvm \
+-cpu host \
+-smp 2 \
+-m 4G \
+-machine type=q35,accel=kvm \
+-rtc base=localtime \
+-drive file=winserver.qcow2,format=qcow2,if=ide \
+-cdrom ../iso/en-us_windows_server_2022_updated_july_2023_x64_dvd_541692c3.iso \
+-boot order=d \
+-display gtk \
+-netdev user,id=net0,hostfwd=tcp::3389-:3389 \
+-device e1000,netdev=net0
+
+
+Flags meaning:
+-drive file=...,if=ide: makes Windows see the disk without extra drivers.
+
+-cdrom ISO: attaches the installer ISO correctly (no raw warning).
+
+-boot order=d:  boot from the CD first.
+
+-rtc base=localtime:    Windows like localtime RTC.
+
+hostfwd=tcp::3389-:3389:    you can RDP to the VM via localhost:3389 after enabling Remote Desktop.
+
+-cpu host:  passes your host CPU features through.
+
+
