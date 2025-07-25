@@ -36,3 +36,30 @@ hostfwd=tcp::3389-:3389:    you can RDP to the VM via localhost:3389 after enabl
 -cpu host:  passes your host CPU features through.
 
 
+
+
+
+
+
+
+
+
+
+4) After installation finishes
+Shut down the VM, then boot from the disk:
+
+bash
+Copy
+Edit
+qemu-system-x86_64 \
+  -enable-kvm \
+  -cpu host \
+  -smp 4 \
+  -m 8G \
+  -machine type=q35,accel=kvm \
+  -rtc base=localtime \
+  -drive file=win2022.qcow2,format=qcow2,if=ide \
+  -boot order=c \
+  -display gtk \
+  -netdev user,id=net0,hostfwd=tcp::3389-:3389 \
+  -device e1000,netdev=net0
